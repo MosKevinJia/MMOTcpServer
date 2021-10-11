@@ -4,7 +4,6 @@ package Game
 import (
 	"TestMMO2/src/Game/PB"
 	"TestMMO2/src/MServer"
-	//"fmt"
 )
 
 // User
@@ -25,12 +24,8 @@ type User struct {
 	// 方向
 	A float32
 
-	// 移动
 	MoveState int32 //是否移动 0=停 1坐标移动  2方向移动
 	Speed     float32
-	// TO_X      float32
-	// TO_Y      float32
-	// TO_A      float32 //方向
 	FRAME int32
 
 	Session *MServer.MSession

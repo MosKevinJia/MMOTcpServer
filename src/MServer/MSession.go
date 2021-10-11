@@ -21,7 +21,6 @@ type MSession struct {
 	mux            sync.RWMutex
 	cmdCache       *[]byte // 命令缓存
 	cmdCacheId     uint32
-	//ws_messageType int // Websocket MessageType 默认2
 }
 
 // 验证并处理消息
@@ -93,10 +92,6 @@ func (s *MSession) SendByte(bitmsg []byte) {
 		}
 	} else if s.ConnType == TCPWEBSOCKET {
 		s.wsconn.WriteMessage(ws_messageType, bitmsg)
-		// err := s.wsconn.WriteMessage(ws_messageType, bitmsg)
-		// if err != nil {
-		// 	fmt.Println("SendByte Error ", err)
-		// }
 	}
 	s.mux.Unlock() //解锁
 }
@@ -109,8 +104,6 @@ func (s *MSession) Send(msgid uint32, bitmsg []byte) {
 	var blen = make([]byte, 4)
 	binary.LittleEndian.PutUint32(blen, (uint32)(len(bitmsg)+8))
 	bitm := s.BytesCombine(ByteHead, bid, blen, bitmsg, ByteEnd)
-
-	//fmt.Println(bitm)
 	s.SendByte(bitm)
 
 }

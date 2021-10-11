@@ -2,14 +2,10 @@
 package MServer
 
 import (
-	//"bytes"
 	"encoding/binary"
 	"fmt"
 	"net/http"
 	"time"
-
-	//"sync"
-
 	"github.com/gorilla/websocket"
 )
 
@@ -19,9 +15,6 @@ const (
 
 	// Time allowed to read the next pong message from the peer.
 	pongWait = 0 //30 * time.Second
-
-	// Send pings to peer with this period. Must be less than pongWait.
-	//pingPeriod = (pongWait * 9) / 10
 
 	ws_messageType = 2
 )
@@ -75,8 +68,6 @@ func (s *MSession) tcpWebSocket_recv() {
 
 	// 设置消息的最大长度
 	s.wsconn.SetReadLimit(RECV_BUFF_LEN)
-	//s.wsconn.SetReadDeadline(time.Now().Add(pongWait))
-	//s.wsconn.SetWriteDeadline(time.Now().Add(writeWait))
 	s.wsconn.SetReadDeadline(time.Time{})
 	s.wsconn.SetWriteDeadline(time.Time{})
 
@@ -84,17 +75,12 @@ func (s *MSession) tcpWebSocket_recv() {
 
 		_, buff, err := s.wsconn.ReadMessage()
 		if err != nil {
-			//websocket.IsUnexpectedCloseError(err, s.wsconn.CloseGoingAway, websocket.CloseAbnormalClosure)
-			//fmt.Println("WebSocket消息读取出现错误", err.Error())
-			//s.wsconn.Close()
 			s.callback_error(s, err)
 			return
 		}
-		//s.ws_messageType = mt
 
 		bufflen := len(buff)
 		ihead := indexOf(buff, ByteHead)
-		//iend := indexOf(buff, ByteEnd)
 
 		if ihead < 0 || bufflen < ihead+10 {
 			break
@@ -108,13 +94,11 @@ func (s *MSession) tcpWebSocket_recv() {
 			break
 		}
 
-		//fmt.Println(buff[iend], ByteEnd[0], buff[iend] == ByteEnd[0])
 		if buff[iend] != ByteEnd[0] || buff[iend+1] != ByteEnd[1] {
 			break
 		}
 
 		if ihead >= 0 && iend > ihead {
-			//fmt.Println(buff[ihead+2 : iend])
 			s.recvMessage(buff[ihead+2 : iend])
 		}
 

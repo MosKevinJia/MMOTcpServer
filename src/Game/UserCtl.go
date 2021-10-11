@@ -4,12 +4,8 @@ package Game
 import (
 	"TestMMO2/src/Game/PB"
 	"TestMMO2/src/MServer"
-
-	//"fmt"
-
 	"math/rand"
 	"strconv"
-
 	proto "github.com/gogo/protobuf/proto"
 )
 
@@ -138,7 +134,6 @@ func (g *Game) GetAllUserLastCmdCache(skip_id int32) *PB.AllLastCmdCache {
 			msgid, byteCmd := u.Session.GetLastCmdCache()
 
 			if msgid != (uint32)(PB.MSG_ID_LOGIN) {
-				//fmt.Println("byteCmd ", byteCmd)
 				cache := PB.LastCmdCache{Id: (int32)(msgid), Cache: *byteCmd}
 				arr = append(arr, &cache)
 				count++

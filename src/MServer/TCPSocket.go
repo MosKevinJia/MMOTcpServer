@@ -2,12 +2,9 @@
 package MServer
 
 import (
-	//"bytes"
 	"encoding/binary"
 	"fmt"
 	"net"
-	//"net/http"
-	//"sync"
 )
 
 // TCPSocket开始 :5555
@@ -75,33 +72,23 @@ func (s *MSession) tcpSocket_recv() {
 		iend := 0
 		for ihead >= 0 {
 			ihead = indexOf(buff, ByteHead)
-			//iend = indexOf(buff, ByteEnd)
 
 			if ihead < 0 || bufflen < ihead+10 {
 				break
 			}
-
-			//fmt.Println(buff[ihead:])
 			msglenBit := buff[ihead+4+2 : ihead+4+4+2]
 			msglen := (int)(binary.LittleEndian.Uint32(msglenBit))
-			// fmt.Println("bufflen", bufflen)
-			// fmt.Println("msglen", msglen)
-			// fmt.Println("ihead", ihead)
 			iend = ihead + msglen + 2
 
-			//fmt.Println("iend =", iend)
 			if iend+2 > bufflen {
 				break
 			}
 
-			//fmt.Println(buff[iend], ByteEnd[0], buff[iend] == ByteEnd[0])
 			if buff[iend] != ByteEnd[0] || buff[iend+1] != ByteEnd[1] {
 				break
 			}
 
 			if ihead >= 0 && iend > ihead {
-
-				//fmt.Println(buff[ihead+2 : iend])
 				s.recvMessage(buff[ihead+2 : iend])
 			}
 

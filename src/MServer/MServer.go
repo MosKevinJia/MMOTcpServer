@@ -40,8 +40,6 @@ type CallBack_Recv func(s *MSession, msgid uint32, bit_msg []byte)
 type CallBack_Error func(s *MSession, err error)
 
 func init() {
-	//fmt.Println("head", ByteHead)
-	//fmt.Println("end", ByteEnd)
 }
 
 // 新创建
@@ -54,12 +52,10 @@ func New() *MServer {
 func (s *MServer) BroadCast(msgid uint32, bitmsg []byte) {
 
 	var bid = make([]byte, 4)
-	binary.LittleEndian.PutUint32(bid, msgid) // 加入Msg ID
+	binary.LittleEndian.PutUint32(bid, msgid) 
 	var blen = make([]byte, 4)
-	binary.LittleEndian.PutUint32(blen, (uint32)(len(bitmsg)+8)) // 加入长度Len
-
-	bitm := BytesCombine(ByteHead, bid, blen, bitmsg, ByteEnd) // 合并
-
+	binary.LittleEndian.PutUint32(blen, (uint32)(len(bitmsg)+8))
+	bitm := BytesCombine(ByteHead, bid, blen, bitmsg, ByteEnd) 
 	s.mAllSessions.Range(func(k, v interface{}) bool {
 		v.(*MSession).SendByte(bitm)
 		return true

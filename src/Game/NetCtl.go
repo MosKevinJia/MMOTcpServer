@@ -18,9 +18,6 @@ func (g *Game) InitRouter() {
 	g.AddRouter((uint32)(PB.MSG_ID_MOVE_TO), g.C2S_MOVETO)
 	g.AddRouter((uint32)(PB.MSG_ID_MOVE_STOP), g.C2S_MOVESTOP)
 
-	// g.RouterDict[ENUM_C2S_LOGIN] = g.C2S_LOGIN
-	// g.RouterDict[ENUM_MOVETO] = g.C2S_MOVETO
-	// g.RouterDict[ENUM_STOPMOVE] = g.C2S_STOPMOVE
 }
 
 // 添加路由
@@ -49,7 +46,6 @@ func (g *Game) SessionError(s *MServer.MSession, err error) {
 //  4个字节的ID + 4个字节的长度 + Message Byte
 func (g *Game) SessionRecv(s *MServer.MSession, msgid uint32, bit_msg []byte) {
 
-	//fmt.Println("Recv ", s.ID, msgid)
 	callfun, ok := g.RouterDict[msgid]
 	if ok {
 		callfun(s, bit_msg)

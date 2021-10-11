@@ -42,14 +42,14 @@ func (g *Game) SessionAccpet(s *MServer.MSession) {
 func (g *Game) SessionError(s *MServer.MSession, err error) {
 
 	g.PlayerOffline(s.ID)
-	fmt.Println("断开", s.ID, s.ADDR, "  ", err)
+	//fmt.Println("断开", s.ID, s.ADDR, "  ", err)
 }
 
 // 接收消息
 //  4个字节的ID + 4个字节的长度 + Message Byte
 func (g *Game) SessionRecv(s *MServer.MSession, msgid uint32, bit_msg []byte) {
 
-	fmt.Println("Recv ", s.ID, msgid)
+	//fmt.Println("Recv ", s.ID, msgid)
 	callfun, ok := g.RouterDict[msgid]
 	if ok {
 		callfun(s, bit_msg)

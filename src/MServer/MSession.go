@@ -92,10 +92,11 @@ func (s *MSession) SendByte(bitmsg []byte) {
 			fmt.Println(err)
 		}
 	} else if s.ConnType == TCPWEBSOCKET {
-		err := s.wsconn.WriteMessage(ws_messageType, bitmsg)
-		if err != nil {
-			fmt.Println("SendByte Error ", err)
-		}
+		s.wsconn.WriteMessage(ws_messageType, bitmsg)
+		// err := s.wsconn.WriteMessage(ws_messageType, bitmsg)
+		// if err != nil {
+		// 	fmt.Println("SendByte Error ", err)
+		// }
 	}
 	s.mux.Unlock() //解锁
 }

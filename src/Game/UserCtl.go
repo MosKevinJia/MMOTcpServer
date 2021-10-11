@@ -4,7 +4,8 @@ package Game
 import (
 	"TestMMO2/src/Game/PB"
 	"TestMMO2/src/MServer"
-	"fmt"
+
+	//"fmt"
 
 	"math/rand"
 	"strconv"
@@ -66,8 +67,10 @@ func (g *Game) GetUser(id int32) *User {
 func (g *Game) PlayerOnline(user *User) {
 
 	g.UserDict.Store(user.Id, user)
-	g.user_count++
 
+	g.mux.Lock()
+	g.user_count++
+	g.mux.Unlock()
 	p := PB.PlayerOnline{
 		Info:  user.GetInfo(),
 		Frame: g.GetTime(),
@@ -81,8 +84,15 @@ func (g *Game) PlayerOnline(user *User) {
 // 玩家下线
 func (g *Game) PlayerOffline(id int32) {
 
-	g.UserDict.Delete(id)
+	_, ok := g.UserDict.LoadAndDelete(id)
+
+	if !ok {
+		return
+	}
+
+	g.mux.Lock()
 	g.user_count--
+	g.mux.Unlock()
 
 	p := PB.PlayerOffline{
 		Id:    id,

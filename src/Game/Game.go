@@ -24,6 +24,8 @@ type Game struct {
 	RouterDict map[uint32]CallBackRouter // 路由字典
 
 	server *MServer.MServer
+
+	mux sync.RWMutex
 }
 
 func init() {

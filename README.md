@@ -1,4 +1,4 @@
-# Golang 帧同步通信框架
+# Golang 轻量级 帧同步通信框架
 
 1.处理粘包断包
 2.同时支持TCPSocket和WebSocket共连
